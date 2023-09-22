@@ -43,6 +43,20 @@ fastify.get('/iclock/getrequest', (request, reply) => {
   reply.send('OK')
 })
 
+fastify.post('/iclock/cdata', (request, reply) => {
+  const { SN, table, Stamp } = request.query as {
+    SN: string;
+    table: string;
+    Stamp: string
+  }
+
+  console.log(SN)
+  console.log(table)
+  console.log(Stamp)
+  console.log(request.body)
+  reply.send('OK: 1')
+})
+
 fastify.get('/', (_request, reply) => {
   reply.send('OK')
 })
