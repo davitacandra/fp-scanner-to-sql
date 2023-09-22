@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
-export const rawParser = (fastify: FastifyInstance) => {
+export const rawParser = async (fastify: FastifyInstance) => {
   fastify.addContentTypeParser('*', (_request, payload, done) => {
     let data = ''
     payload.on('data', (chunk) => {

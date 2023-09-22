@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
-export const rootRoute = (fastify: FastifyInstance) => {
+export const rootRoute = async (fastify: FastifyInstance) => {
   fastify.get('/', (_request, reply) => {
     reply.send('OK')
   })

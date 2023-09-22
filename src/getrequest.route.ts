@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
-export const getrequestRoute = (fastify: FastifyInstance) => {
+export const getrequestRoute = async (fastify: FastifyInstance) => {
   fastify.get('/', (request, reply) => {
     const { SN } = request.query as { SN: string }
 
