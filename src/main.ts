@@ -32,12 +32,14 @@ TimeZone=7
 Realtime=1
 Encrypt=0`
 
-  console.log(request.query)
   reply.send(response)
 })
 
 fastify.get('/iclock/getrequest', (request, reply) => {
-  console.log(request.query)
+  const { SN } = request.query as { SN: string }
+
+  // FIXME: check for remote command
+  console.log(SN)
   reply.send('OK')
 })
 
