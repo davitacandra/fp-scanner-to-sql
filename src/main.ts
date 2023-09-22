@@ -1,5 +1,10 @@
-import Fastify, { FastifyReply, FastifyRequest } from 'fastify'
+import Fastify from 'fastify'
 import { config } from 'dotenv'
+import { rawParser } from './raw.parser'
+import { cdataRoute } from './cdata.route'
+import { getrequestRoute } from './getrequest.route'
+import { rootRoute } from './root.route'
+import { catchAllRoute } from './catch-all.route'
 
 config()
 
@@ -7,67 +12,11 @@ const PORT = process.env.PORT! || 3000
 
 const fastify = Fastify({ logger: true })
 
-fastify.addContentTypeParser('*', (_request, payload, done) => {
-  let data = ''
-  payload.on('data', (chunk) => {
-    data += chunk
-  })
-  payload.on('end', () => {
-    done(null, data)
-  })
-})
-
-fastify.get('/iclock/cdata', (request: FastifyRequest, reply: FastifyReply) => {
-  const { SN } = request.query as { SN: string }
-
-  const response = `GET OPTION FROM: ${SN}
-Stamp=9999
-OpStamp=0
-ErrorDelay=60
-Delay=30
-TransTimes=00:00;14:05
-TransInterval=1
-TransFlag=1000000000
-TimeZone=7
-Realtime=1
-Encrypt=0`
-
-  reply.send(response)
-})
-
-fastify.get('/iclock/getrequest', (request, reply) => {
-  const { SN } = request.query as { SN: string }
-
-  // FIXME: check for remote command
-  console.log(SN)
-  reply.send('OK')
-})
-
-fastify.post('/iclock/cdata', (request, reply) => {
-  const { SN, table, Stamp } = request.query as {
-    SN: string;
-    table: string;
-    Stamp: string
-  }
-
-  console.log(SN)
-  console.log(table)
-  console.log(Stamp)
-  console.log(request.body)
-  reply.send('OK: 1')
-})
-
-fastify.get('/', (_request, reply) => {
-  reply.send('OK')
-})
-
-fastify.all('*', (request, reply) => {
-  console.log(request.method)
-  console.log(request.url)
-  console.log(request.headers)
-  console.log(request.body)
-  reply.send('OK')
-})
+fastify.register(rawParser)
+fastify.register(cdataRoute, { prefix: '/iclock/cdata' })
+fastify.register(getrequestRoute, { prefix: '/iclock/getrequest' })
+fastify.register(rootRoute)
+fastify.register(catchAllRoute)
 
 fastify.listen({ port: +PORT }, (err) => {
   if (err) throw err
