@@ -1,0 +1,6 @@
+CREATE TABLE device_command (
+  id INT NOT NULL DEFAULT 1,
+  sn VARCHAR(64) NOT NULL,
+  command VARCHAR(255) NOT NULL,
+  executed INT NOT NULL DEFAULT 0
+);
