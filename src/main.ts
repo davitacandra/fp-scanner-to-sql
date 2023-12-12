@@ -18,6 +18,11 @@ fastify.addContentTypeParser('*', rawParser)
 
 fastify.register(fastifyMySQL, { promise: true, connectionString: MYSQL_URL })
 
+// Now you should be able to access the mysql property
+fastify.register(async (fastify) => {
+  fastify.decorate('mysql', fastify.mysql)
+})
+
 fastify.register(cdataRoute, { prefix: '/iclock/cdata' })
 fastify.register(getrequestRoute, { prefix: '/iclock/getrequest' })
 fastify.register(rootRoute)
